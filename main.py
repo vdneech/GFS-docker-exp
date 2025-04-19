@@ -97,7 +97,7 @@ def start(message, interrupt=False):
                                                                                  callback_data="ceo"))
         keyboard.row(register_button, format_button)
         keyboard.row(ceo_button)
-        con = sqlite3.connect('data/GFS.db')
+        con = sqlite3.connect('/data/GFS.db')
         if check_user_in_db(message.chat.id):
             con.execute(f'INSERT INTO users (chat_id, telegram, date_of_register) VALUES (?, ?, ?);',
                         (message.chat.id, message.from_user.username,
@@ -139,7 +139,7 @@ def from_where(message):
         return start(message, interrupt=True)
     elif message.text not in [None, 'Отмена', 'Вернуться в меню']:
         # typing(message)
-        con = sqlite3.connect('data/GFS.db')
+        con = sqlite3.connect('/data/GFS.db')
         con.execute(f'UPDATE users SET from_where = ? WHERE chat_id = {message.chat.id};', (message.text,))
         con.commit()
         con.close()
@@ -163,7 +163,7 @@ def reg_name(message):
         return start(message, interrupt=True)
     elif message.text not in [None, 'Отмена', 'Вернуться в меню']:
         # typing(message)
-        con = sqlite3.connect('data/GFS.db')
+        con = sqlite3.connect('/data/GFS.db')
         con.execute(f'UPDATE users SET name = ? WHERE chat_id = {message.chat.id};', (message.text,))
         con.commit()
         con.close()
@@ -194,7 +194,7 @@ def food_restriction(message):
         delete_user_from_db(message.chat.id)
         return start(message, interrupt=True)
     elif message.text not in [None, 'Отмена', 'Вернуться в меню']:
-        con = sqlite3.connect('data/GFS.db')
+        con = sqlite3.connect('/data/GFS.db')
         con.execute(
             f'UPDATE users SET food_restriction = "{message.text}" WHERE chat_id = {message.chat.id}')
         con.commit()
@@ -225,7 +225,7 @@ def study(message):
         delete_user_from_db(message.chat.id)
         return start(message, interrupt=True)
     elif message.text not in [None, 'Отмена', 'Вернуться в меню']:
-        con = sqlite3.connect('data/GFS.db')
+        con = sqlite3.connect('/data/GFS.db')
         con.execute(f'UPDATE users SET study = "{message.text}" WHERE chat_id = {message.chat.id}')
         con.commit()
         con.close()
@@ -251,7 +251,7 @@ def study(message):
 def contact(message):
     keyboard = types.InlineKeyboardMarkup()
     payment_button = types.InlineKeyboardButton(text="Оплатил", callback_data="successful_payment")
-    con = sqlite3.connect('data/GFS.db')
+    con = sqlite3.connect('/data/GFS.db')
     if closing():
         return bot.send_message(message.chat.id,
                                 'Номер добавлен, но…\n\nК сожалению, места закончились. Оплата невозможна.\n\nНе расстраивайтесь, мы можем внести Вас список ожидания. При освобождении места, мы непременно свяжемся.\n\nСледите за нашими новостями, чтобы первыми узнать о новом сезоне.')
@@ -318,7 +318,7 @@ def callbacks(callback):
         if callback.data == 'register':
             # Проверка есть ли в базе
             if check_user_in_db(callback.message.chat.id):
-                con = sqlite3.connect('data/GFS.db')
+                con = sqlite3.connect('/data/GFS.db')
                 print(datetime.now(pytz.timezone('Europe/Moscow')))
                 con.execute(f'INSERT INTO users (chat_id, telegram, date_of_register) VALUES (?, ?, ?);',
                             (callback.message.chat.id, callback.from_user.username,

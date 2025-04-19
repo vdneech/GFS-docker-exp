@@ -14,7 +14,7 @@ load_dotenv(find_dotenv())
 
 
 def create_db():
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users
             (telegram TEXT,
@@ -37,7 +37,7 @@ def create_db():
 
 def data_selector():
     try:
-        cur = sqlite3.connect('data/GFS.db').cursor()
+        cur = sqlite3.connect('/data/GFS.db').cursor()
         cur.execute(
             'SELECT telegram, from_where, name, study, food_restriction, phone, paid, date_of_register, date_of_payment FROM users')
         users = cur.fetchall()
@@ -85,7 +85,7 @@ def create_table():
 # Удаление пользователя из базы
 
 def delete_user_from_db(chat_id: int):
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cn.execute(f'DELETE FROM users WHERE chat_id = {chat_id}')
     cn.commit()
     cn.close()
@@ -95,7 +95,7 @@ def delete_user_from_db(chat_id: int):
 # Проверка пользователя в базе по chat_id
 
 def check_user_in_db(chat_id: int) -> bool:
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute(f'SELECT chat_id FROM users WHERE chat_id = {chat_id}')
     user = cursor.fetchone()
@@ -107,7 +107,7 @@ def check_user_in_db(chat_id: int) -> bool:
 # Выборка оплативших пользователей
 
 def check_payment(chat_id: int) -> bool:
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute(f'SELECT paid FROM users WHERE chat_id == {chat_id}')
     status = cursor.fetchone()
@@ -122,7 +122,7 @@ def check_payment(chat_id: int) -> bool:
 
 
 def check_reg_session(telegram: int) -> bool:
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute(f'SELECT chat_id, name, food_restriction, study, phone FROM users WHERE chat_id = {telegram}')
     session = cursor.fetchone()
@@ -140,7 +140,7 @@ def check_reg_session(telegram: int) -> bool:
 
 
 def save_receipt(chat_id):
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute(
         'UPDATE users SET paid = ?, date_of_payment = ? WHERE chat_id = ?',
@@ -154,7 +154,7 @@ def save_receipt(chat_id):
 
 
 def get_receipts():
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute(
         "SELECT telegram, name, paid, food_restriction, study, phone FROM users WHERE paid IS NOT NULL")
@@ -167,7 +167,7 @@ def get_receipts():
 
 
 def closing() -> bool:
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute("SELECT chat_id FROM users WHERE paid IS NOT NULL")
     data = cursor.fetchall()
@@ -179,7 +179,7 @@ def closing() -> bool:
 # Количество пользователей
 
 def user_counter():
-    cn = sqlite3.connect('data/GFS.db')
+    cn = sqlite3.connect('/data/GFS.db')
     cursor = cn.cursor()
     cursor.execute("SELECT chat_id FROM users WHERE paid IS NOT NULL")
     data = cursor.fetchall()
